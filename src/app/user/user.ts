@@ -6,7 +6,7 @@ export interface IName {
   last: string;
 }
 
-export enum IPhoneType {
+export enum PhoneType {
   None = 'none',
   Mobile = 'mobile',
   Home = 'home',
@@ -14,7 +14,7 @@ export enum IPhoneType {
 }
 
 export interface IPhone {
-  type: IPhoneType;
+  type: PhoneType;
   digits: string;
   id: number;
 }

@@ -18,7 +18,7 @@ import { CacheService } from './cache.service';
 export interface IAuthStatus {
   isAuthenticated: boolean;
   userRole: Role;
-  userId: string;
+  userId: number;
 }
 
 export interface IServerResponse {
@@ -28,7 +28,7 @@ export interface IServerResponse {
 export const defaultAuthStatus: IAuthStatus = {
   isAuthenticated: false,
   userRole: Role.None,
-  userId: '',
+  userId: -1,
 };
 
 export interface IAuthService {
