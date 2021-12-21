@@ -28,7 +28,7 @@ export interface IServerResponse {
 export const defaultAuthStatus: IAuthStatus = {
   isAuthenticated: false,
   userRole: Role.None,
-  userId: -1,
+  userId: 0,
 };
 
 export interface IAuthService {

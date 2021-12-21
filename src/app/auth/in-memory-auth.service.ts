@@ -2,11 +2,17 @@ import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { sign } from 'fake-jwt-sign';
 import { PhoneType, User } from '../user/user';
-import { AuthService, IAuthStatus, IServerResponse } from './auth.service';
+import {
+  AuthService,
+  defaultAuthStatus,
+  IAuthStatus,
+  IServerResponse,
+} from './auth.service';
 import { Role } from './auth.enum';
 
 @Injectable()
 export class InMemoryAuthService extends AuthService {
+  private authStatus: IAuthStatus | undefined;
   private defaultUser = User.Build({
     id: 1,
     email: 'blessed@test.com',
@@ -32,6 +38,7 @@ export class InMemoryAuthService extends AuthService {
     ],
     fullName: '',
   });
+
   constructor() {
     super();
     console.warn(
@@ -49,7 +56,7 @@ export class InMemoryAuthService extends AuthService {
         () => new Error('Failed to login! Email needs to end with @test.com.')
       );
     }
-    const authStatus: IAuthStatus = {
+    this.authStatus = {
       isAuthenticated: true,
       userId: this.defaultUser.id,
       userRole: email.includes('cashier')
@@ -60,10 +67,11 @@ export class InMemoryAuthService extends AuthService {
         ? Role.Manager
         : Role.None,
     };
-    this.defaultUser.role = authStatus.userRole;
+
+    this.defaultUser.role = this.authStatus.userRole;
 
     const authResponse: IServerResponse = {
-      accessToken: sign(authStatus, 'secret', {
+      accessToken: sign(this.authStatus, 'secret', {
         expiresIn: '1h',
         algorithm: 'none',
       }),
@@ -71,9 +79,11 @@ export class InMemoryAuthService extends AuthService {
 
     return of(authResponse);
   }
+
   protected transformJwtToken(token: unknown): IAuthStatus {
-    throw new Error('Method not implemented.');
+    return this.authStatus ?? defaultAuthStatus;
   }
+
   protected getCurrentUser(): Observable<User> {
     return of(this.defaultUser);
   }
