@@ -1,7 +1,19 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import jwt_decode from 'jwt-decode';
+import {
+  BehaviorSubject,
+  map,
+  tap,
+  Observable,
+  filter,
+  catchError,
+  throwError,
+  mergeMap,
+} from 'rxjs';
+import { transformError } from '../common/common';
 import { IUser, User } from '../user/user';
 import { Role } from './auth.enum';
+import { CacheService } from './cache.service';
 
 export interface IAuthStatus {
   isAuthenticated: boolean;
@@ -28,20 +40,47 @@ export interface IAuthService {
 }
 
 @Injectable()
-export abstract class AuthService implements IAuthService {
+export abstract class AuthService extends CacheService implements IAuthService {
   readonly authStatus$ = new BehaviorSubject<IAuthStatus>(defaultAuthStatus);
   readonly currentUser$ = new BehaviorSubject<IUser>(new User());
 
-  constructor() {}
+  constructor() {
+    super();
+  }
 
   login(email: string, password: string): Observable<void> {
-    throw new Error('Method not implemented.');
+    this.clearToken();
+
+    const loginResponse$ = this.authProvider(email, password).pipe(
+      map((value) => {
+        this.setToken(value.accessToken);
+        const token = jwt_decode(value.accessToken);
+        return this.transformJwtToken(token);
+      }),
+      tap((status) => this.authStatus$.next(status)),
+      filter((status: IAuthStatus) => status.isAuthenticated),
+      mergeMap(() => this.getCurrentUser()),
+      map((user) => this.currentUser$.next(user)),
+      catchError(transformError)
+    );
+    loginResponse$.subscribe({
+      error: (err) => {
+        this.logout();
+        return throwError(() => err);
+      },
+    });
+    return loginResponse$;
   }
+
   logout(clearToken?: boolean): void {
-    throw new Error('Method not implemented.');
+    if (clearToken) {
+      this.clearToken();
+    }
+    setTimeout(() => this.authStatus$.next(defaultAuthStatus), 0);
   }
+
   getToken(): string {
-    throw new Error('Method not implemented.');
+    return this.getItem('jwt') ?? '';
   }
 
   protected abstract authProvider(
@@ -51,4 +90,12 @@ export abstract class AuthService implements IAuthService {
 
   protected abstract transformJwtToken(token: unknown): IAuthStatus;
   protected abstract getCurrentUser(): Observable<User>;
+
+  protected setToken(jwt: string) {
+    this.setItem('jwt', jwt);
+  }
+
+  protected clearToken() {
+    this.removeItem('jwt');
+  }
 }
