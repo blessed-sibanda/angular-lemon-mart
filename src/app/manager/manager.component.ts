@@ -19,7 +19,7 @@ import { Component, OnInit } from '@angular/core';
       </a>
       <span class="flex-spacer"></span>
       <button
-        routerLink="/inventory"
+        routerLink="/inventory/home"
         class="mat-elevation-z2"
         mat-mini-fab
         aria-label="Inventory"

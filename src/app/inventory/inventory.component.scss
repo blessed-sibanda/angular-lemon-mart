@@ -1,0 +1,11 @@
+@import "../../variables";
+
+div[fxLayout] {
+  margin-top: 32px;
+}
+
+.active-link {
+  font-weight: bold;
+  border-bottom: 2px solid $primary;
+  border-radius: 0;
+}
