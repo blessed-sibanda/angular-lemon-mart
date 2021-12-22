@@ -72,7 +72,7 @@ export class InMemoryAuthService extends AuthService {
 
     const authResponse: IServerResponse = {
       accessToken: sign(this.authStatus, 'secret', {
-        expiresIn: '1h',
+        expiresIn: '10h',
         algorithm: 'none',
       }),
     };
