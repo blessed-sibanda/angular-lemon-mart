@@ -1,17 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  catchError,
-  combineLatest,
-  filter,
-  Observable,
-  ObservableInput,
-  of,
-  tap,
-} from 'rxjs';
+import { catchError, combineLatest, filter, tap } from 'rxjs';
 import { SubSink } from 'subsink';
 import { AuthService } from '../auth/auth.service';
+import { EmailValidation, PasswordValidation } from '../common/validators';
 
 @Component({
   selector: 'app-login',
@@ -45,15 +38,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   buildLoginForm() {
     this.loginForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(8),
-          Validators.maxLength(50),
-        ],
-      ],
+      email: ['', EmailValidation],
+      password: ['', PasswordValidation],
     });
   }
 
