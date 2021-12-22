@@ -5,6 +5,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Observable, of, Subscription } from 'rxjs';
 import { MaterialModule } from '../material.module';
 import { RouterTestingModule } from '@angular/router/testing';
+import { AuthService } from '../auth/auth.service';
+import { UiService } from './ui.service';
 
 export class MediaObserverFake {
   isActive(query: string): boolean {
@@ -25,7 +27,14 @@ export class MediaObserverFake {
 }
 
 export const commonTestingProviders: any[] = [
-  // Intentionally Left Blank!!!
+  {
+    provide: AuthService,
+    useValue: jasmine.createSpyObj(AuthService, ['login', 'logout', '']),
+  },
+  {
+    provide: UiService,
+    useValue: jasmine.createSpyObj(UiService, ['showToast', 'showDialog']),
+  },
 ];
 
 export const commonTestingModules: any[] = [

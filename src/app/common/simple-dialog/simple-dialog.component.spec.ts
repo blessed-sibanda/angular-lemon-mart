@@ -1,4 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
+import {
+  commonTestingModules,
+  commonTestingProviders,
+} from '../common.testing';
 
 import { SimpleDialogComponent } from './simple-dialog.component';
 
@@ -8,9 +17,20 @@ describe('SimpleDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SimpleDialogComponent ]
-    })
-    .compileComponents();
+      providers: [
+        ...commonTestingProviders,
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: jasmine.createSpyObj('MAT_DIALOG_DATA', ['']),
+        },
+        {
+          provide: MatDialogRef,
+          useValue: jasmine.createSpyObj('MatDialogRef', ['']),
+        },
+      ],
+      imports: commonTestingModules,
+      declarations: [SimpleDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
