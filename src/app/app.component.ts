@@ -1,13 +1,22 @@
 import { Component } from '@angular/core';
+import { AuthService } from './auth/auth.service';
 
 @Component({
   selector: 'app-root',
   template: `
-    <mat-toolbar color="primary" fxLayoutGap="8px">
+    <mat-toolbar
+      *ngIf="{
+        status: authService.authStatus$ | async,
+        user: authService.currentUser$ | async
+      } as auth"
+      color="primary"
+      fxLayoutGap="8px"
+    >
       <button mat-icon-button><mat-icon>menu</mat-icon></button>
       <a mat-button routerLink="/home"><h1>LemonMart</h1></a>
       <span class="flex-spacer"></span>
       <button
+        *ngIf="auth?.status?.isAuthenticated"
         routerLink="/user/profile"
         class="mat-elevation-z2"
         mat-mini-fab
@@ -17,6 +26,7 @@ import { Component } from '@angular/core';
         <mat-icon>account_circle</mat-icon>
       </button>
       <button
+        *ngIf="auth?.status?.isAuthenticated"
         routerLink="/user/logout"
         aria-label="Logout"
         class="mat-elevation-z2"
@@ -30,4 +40,6 @@ import { Component } from '@angular/core';
   `,
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {}
+export class AppComponent {
+  constructor(public authService: AuthService) {}
+}

@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { sign } from 'fake-jwt-sign';
 import { PhoneType, User } from '../user/user';
+import jwt_decode from 'jwt-decode';
+
 import {
   AuthService,
   defaultAuthStatus,
@@ -72,8 +74,10 @@ export class InMemoryAuthService extends AuthService {
 
     const authResponse: IServerResponse = {
       accessToken: sign(this.authStatus, 'secret', {
-        expiresIn: '10h',
+        expiresIn: '1h',
         algorithm: 'none',
+        issuedAt: new Date(),
+        blah: 'blah blah',
       }),
     };
 

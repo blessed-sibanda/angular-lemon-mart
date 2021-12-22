@@ -1,43 +1,29 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { combineLatest, filter, tap } from 'rxjs';
+import { Component } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-home',
   template: `
-    <div fxLayout="column" fxLayoutAlign="center center">
-      <span class="mat-display-2">Hello, Limoncu!</span>
-      <button (click)="login()" mat-raised-button color="primary">
-        Login as Manager
-      </button>
+    <div
+      fxLayout="row"
+      fxLayoutAlign="center"
+      class="margin-top"
+      *ngIf="(authService.authStatus$ | async)?.isAuthenticated; else doLogin"
+    >
+      <div class="mat-typography" style="text-align: center;">
+        <h1>This is LemonMart! The place where</h1>
+        <h2>You get a lemon, you get a lemon, you get a lemon...</h2>
+        <h3>Everybody gets a lemon.</h3>
+      </div>
     </div>
+
+    <ng-template #doLogin>
+      <app-login></app-login>
+    </ng-template>
   `,
-  styles: [
-    `
-      div[fxLayout] {
-        margin-top: 32px;
-      }
-    `,
-  ],
 })
-export class HomeComponent implements OnInit {
-  constructor(private authService: AuthService, private router: Router) {}
+export class HomeComponent {
+  displayLogin = true;
 
-  login() {
-    this.authService.login('blessed.manager@test.com', '123456789');
-
-    combineLatest([this.authService.authStatus$, this.authService.currentUser$])
-      .pipe(
-        filter(([authStatus, user]) => {
-          return authStatus.isAuthenticated && user.id > 0;
-        }),
-        tap(([authStatus, user]) => {
-          this.router.navigate(['/manager']);
-        })
-      )
-      .subscribe();
-  }
-
-  ngOnInit(): void {}
+  constructor(public authService: AuthService) {}
 }

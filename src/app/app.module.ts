@@ -12,15 +12,24 @@ import { AuthService } from './auth/auth.service';
 import { InMemoryAuthService } from './auth/in-memory-auth.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthHttpInterceptor } from './auth/auth-http-interceptor';
+import { LoginComponent } from './login/login.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, PageNotFoundComponent],
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    PageNotFoundComponent,
+    LoginComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
     FlexLayoutModule,
+    ReactiveFormsModule,
+    FormsModule,
   ],
   providers: [
     { provide: AuthService, useClass: InMemoryAuthService },
