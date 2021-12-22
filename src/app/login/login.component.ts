@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, combineLatest, filter, tap } from 'rxjs';
 import { SubSink } from 'subsink';
+import { Role } from '../auth/auth.enum';
 import { AuthService } from '../auth/auth.service';
 import { UiService } from '../common/ui.service';
 import { EmailValidation, PasswordValidation } from '../common/validators';
@@ -25,7 +26,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private uiService: UiService
   ) {
-    this.subs.sink = route.paramMap.subscribe(
+    this.subs.sink = route.queryParamMap.subscribe(
       (params) => (this.redirectUrl = params.get('redirectUrl') ?? '')
     );
   }
@@ -67,9 +68,24 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.uiService.showToast(
             `Welcome ${user.fullName}! Role: ${user.role}`
           );
-          this.router.navigate([this.redirectUrl || '/manager']);
+          this.router.navigate([
+            this.redirectUrl || this.homeRoutePerRole(user.role as Role),
+          ]);
         })
       )
       .subscribe();
+  }
+
+  private homeRoutePerRole(role: Role) {
+    switch (role) {
+      case Role.Cashier:
+        return '/pos';
+      case Role.Clerk:
+        return '/inventory';
+      case Role.Manager:
+        return '/manager';
+      default:
+        return '/user/profile';
+    }
   }
 }
