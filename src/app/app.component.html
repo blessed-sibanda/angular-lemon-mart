@@ -9,7 +9,10 @@
     class="app-toolbar"
     [class.app-is-mobile]="media.isActive('xs')"
   >
-    <button mat-icon-button (click)="sidenav.toggle()">
+    <button
+      mat-icon-button
+      (click)="auth?.status?.isAuthenticated && sidenav.toggle()"
+    >
       <mat-icon>menu</mat-icon>
     </button>
     <a mat-button routerLink="/home"><h1>LemonMart</h1></a>
