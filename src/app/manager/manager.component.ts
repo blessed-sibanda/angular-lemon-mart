@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { MediaObserver } from '@angular/flex-layout';
 
 @Component({
   selector: 'app-manager',
   template: `
-    <mat-toolbar color="accent" fxLayoutGap="8px">
+    <mat-toolbar *ngIf="!media.isActive('xs')" color="accent" fxLayoutGap="8px">
       <a mat-button routerLinkActive="active-link" routerLink="/manager/home">
         Manager's Dashboard
       </a>
@@ -40,7 +41,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./manager.component.scss'],
 })
 export class ManagerComponent implements OnInit {
-  constructor() {}
+  constructor(public media: MediaObserver) {}
 
   ngOnInit(): void {}
 }

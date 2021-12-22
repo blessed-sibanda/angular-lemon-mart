@@ -1,51 +1,45 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { SubSink } from 'subsink';
 import { AuthService } from './auth/auth.service';
+import { MediaObserver } from '@angular/flex-layout';
+import { combineLatest, tap } from 'rxjs';
 
 @Component({
   selector: 'app-root',
-  template: `
-    <mat-toolbar
-      *ngIf="{
-        status: authService.authStatus$ | async,
-        user: authService.currentUser$ | async
-      } as auth"
-      color="primary"
-      fxLayoutGap="8px"
-    >
-      <button mat-icon-button><mat-icon>menu</mat-icon></button>
-      <a mat-button routerLink="/home"><h1>LemonMart</h1></a>
-      <span class="flex-spacer"></span>
-      <button
-        *ngIf="auth?.status?.isAuthenticated"
-        routerLink="/user/profile"
-        class="mat-elevation-z2"
-        mat-mini-fab
-        color="primary"
-        aria-label="User Profile"
-      >
-        <img
-          *ngIf="auth?.user?.picture; else icon"
-          [src]="auth?.user?.picture"
-          class="image-cropper"
-          alt=""
-        />
-        <ng-template #icon><mat-icon>account_circle</mat-icon></ng-template>
-      </button>
-      <button
-        *ngIf="auth?.status?.isAuthenticated"
-        routerLink="/user/logout"
-        aria-label="Logout"
-        class="mat-elevation-z2"
-        mat-mini-fab
-        color="primary"
-      >
-        <mat-icon>lock_open</mat-icon>
-      </button>
-    </mat-toolbar>
-    <router-outlet></router-outlet>
-  `,
+  templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
-  constructor(public authService: AuthService) {}
+export class AppComponent implements OnInit, OnDestroy {
+  private subs = new SubSink();
+  opened: boolean = false;
+
+  constructor(public authService: AuthService, public media: MediaObserver) {}
+
+  ngOnInit(): void {
+    this.subs.sink = combineLatest([
+      this.media.asObservable(),
+      this.authService.authStatus$,
+    ])
+      .pipe(
+        tap(([mediaValue, authStatus]) => {
+          if (!authStatus?.isAuthenticated) {
+            this.opened = false;
+          } else {
+            if (
+              mediaValue[0].mqAlias === 'xs' ||
+              mediaValue[0].mqAlias === 'sm'
+            ) {
+              this.opened = false;
+            } else {
+              this.opened = true;
+            }
+          }
+        })
+      )
+      .subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
+  }
 }
