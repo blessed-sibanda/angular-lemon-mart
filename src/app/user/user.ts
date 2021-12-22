@@ -78,7 +78,7 @@ export class User implements IUser {
   }
 
   get fullName(): string {
-    return `${this.name.first} ${this.name.middle} ${this.name.last}`;
+    return `${this.name.first} ${this.name.middle ?? ''} ${this.name.last}`;
   }
 
   toJSON(): object {
