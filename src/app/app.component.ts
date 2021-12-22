@@ -23,7 +23,13 @@ import { AuthService } from './auth/auth.service';
         color="primary"
         aria-label="User Profile"
       >
-        <mat-icon>account_circle</mat-icon>
+        <img
+          *ngIf="auth?.user?.picture; else icon"
+          [src]="auth?.user?.picture"
+          class="image-cropper"
+          alt=""
+        />
+        <ng-template #icon><mat-icon>account_circle</mat-icon></ng-template>
       </button>
       <button
         *ngIf="auth?.status?.isAuthenticated"
