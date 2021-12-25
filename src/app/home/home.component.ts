@@ -24,7 +24,5 @@ import { AuthService } from '../auth/auth.service';
   `,
 })
 export class HomeComponent {
-  displayLogin = true;
-
   constructor(public authService: AuthService) {}
 }
