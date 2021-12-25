@@ -8,7 +8,11 @@ export function transformError(error: HttpErrorResponse | string) {
   } else if (error.error instanceof ErrorEvent) {
     errorMessage = `Error! ${error.error.message}`;
   } else if (error.status) {
-    errorMessage = `Request failed with ${error.status} ${error.statusText}`;
+    if (error.error && error.error.error && error.error.error.message) {
+      errorMessage = error.error.error.message;
+    } else {
+      errorMessage = `Request failed with ${error.status} ${error.statusText}`;
+    }
   } else if (error instanceof Error) {
     errorMessage = error.message;
   }

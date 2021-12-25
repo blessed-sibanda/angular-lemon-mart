@@ -62,9 +62,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     ])
       .pipe(
         filter(
-          ([authStatus, user]) => authStatus.isAuthenticated && user.id > 0
+          ([authStatus, user]) => authStatus.isAuthenticated && user._id !== ''
         ),
         tap(([authStatus, user]) => {
+          console.log('User -->', user);
           this.uiService.showToast(
             `Welcome ${user.fullName}! Role: ${user.role}`
           );

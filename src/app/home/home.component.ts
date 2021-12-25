@@ -11,6 +11,7 @@ import { AuthService } from '../auth/auth.service';
       *ngIf="(authService.authStatus$ | async)?.isAuthenticated; else doLogin"
     >
       <div class="mat-typography" style="text-align: center;">
+        {{ authService.currentUser$ | async | json }}
         <h1>This is LemonMart! The place where</h1>
         <h2>You get a lemon, you get a lemon, you get a lemon...</h2>
         <h3>Everybody gets a lemon.</h3>

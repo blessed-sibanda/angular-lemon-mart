@@ -9,13 +9,17 @@ import { MaterialModule } from './material.module';
 import { HomeComponent } from './home/home.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AuthService } from './auth/auth.service';
-import { InMemoryAuthService } from './auth/in-memory-auth.service';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpClientModule,
+  HTTP_INTERCEPTORS,
+} from '@angular/common/http';
 import { AuthHttpInterceptor } from './auth/auth-http-interceptor';
 import { LoginComponent } from './login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SimpleDialogComponent } from './common/simple-dialog/simple-dialog.component';
 import { NavigationMenuComponent } from './navigation-menu/navigation-menu.component';
+import { authFactory } from './auth/auth.factory';
 
 @NgModule({
   declarations: [
@@ -34,9 +38,10 @@ import { NavigationMenuComponent } from './navigation-menu/navigation-menu.compo
     FlexLayoutModule,
     ReactiveFormsModule,
     FormsModule,
+    HttpClientModule,
   ],
   providers: [
-    { provide: AuthService, useClass: InMemoryAuthService },
+    { provide: AuthService, useFactory: authFactory, deps: [HttpClient] },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthHttpInterceptor,

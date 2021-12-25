@@ -19,17 +19,25 @@ import { CacheService } from './cache.service';
 export interface IAuthStatus {
   isAuthenticated: boolean;
   userRole: Role;
-  userId: number;
+  userId: string;
+  userEmail: string;
+  userPicture: string;
 }
 
-export interface IServerResponse {
-  accessToken: string;
+export interface IServerAuthResponse {
+  accessToken?: string;
+  status: number;
+  error?: {
+    message: string;
+  };
 }
 
 export const defaultAuthStatus: IAuthStatus = {
   isAuthenticated: false,
   userRole: Role.None,
-  userId: 0,
+  userId: '',
+  userEmail: '',
+  userPicture: '',
 };
 
 export interface IAuthService {
@@ -74,9 +82,13 @@ export abstract class AuthService extends CacheService implements IAuthService {
 
     const loginResponse$ = this.authProvider(email, password).pipe(
       map((value) => {
-        this.setToken(value.accessToken);
-        const token = jwt_decode(value.accessToken);
-        return this.transformJwtToken(token);
+        if (value.status == 200) {
+          this.setToken(value.accessToken || '');
+          const token = jwt_decode(value.accessToken || '');
+          return this.transformJwtToken(token);
+        } else {
+          throw new Error(value.error?.message);
+        }
       }),
       tap((status) => this.authStatus$.next(status)),
       this.getAndUpdateUserIfAuthenticated
@@ -104,7 +116,7 @@ export abstract class AuthService extends CacheService implements IAuthService {
   protected abstract authProvider(
     email: string,
     password: string
-  ): Observable<IServerResponse>;
+  ): Observable<IServerAuthResponse>;
 
   protected abstract transformJwtToken(token: unknown): IAuthStatus;
   protected abstract getCurrentUser(): Observable<User>;

@@ -16,17 +16,17 @@ export enum PhoneType {
 export interface IPhone {
   type: PhoneType;
   digits: string;
-  id: number;
+  _id: string;
 }
 
 export interface IUser {
-  id: number;
+  _id: string;
   email: string;
   name: IName;
   picture: string;
   role: Role | string;
   userStatus: boolean;
-  dateOfBirth?: Date;
+  dateOfBirth: string;
   level: number;
   address: {
     line1: string;
@@ -41,12 +41,12 @@ export interface IUser {
 
 export class User implements IUser {
   constructor(
-    public id = 0,
+    public _id = '',
     public email = '',
     public name = { first: '', middle: '', last: '' } as IName,
     public picture = '',
     public role = Role.None,
-    public dateOfBirth = new Date(),
+    public dateOfBirth = '',
     public userStatus = false,
     public level = 0,
     public address = {
@@ -64,7 +64,7 @@ export class User implements IUser {
     }
 
     return new User(
-      user.id,
+      user._id,
       user.email,
       user.name,
       user.picture,
