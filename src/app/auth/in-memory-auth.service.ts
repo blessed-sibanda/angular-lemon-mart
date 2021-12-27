@@ -1,27 +1,25 @@
-import { Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
-import { sign } from 'fake-jwt-sign';
-import { PhoneType, User } from '../user/user';
-import jwt_decode from 'jwt-decode';
+import { Injectable } from '@angular/core'
+import { sign } from 'fake-jwt-sign'
+import { Observable, of, throwError } from 'rxjs'
 
+import { PhoneType, User } from '../user/user'
+import { Role } from './auth.enum'
 import {
   AuthService,
-  defaultAuthStatus,
   IAuthStatus,
   IServerAuthResponse,
-} from './auth.service';
-import { Role } from './auth.enum';
+  defaultAuthStatus,
+} from './auth.service'
 
 @Injectable()
 export class InMemoryAuthService extends AuthService {
-  private authStatus: IAuthStatus | undefined;
+  private authStatus: IAuthStatus | undefined
   private defaultUser = User.Build({
     _id: '61c5928e0f5783e6cf68231d',
     email: 'blessed@test.com',
     name: { first: 'Blessed', last: 'Sibanda' },
     role: Role.Manager,
-    picture:
-      'https://secure.gravatar.com/avatar/14baf1f4155b9dca35b7bbd97bcc3da7',
+    picture: 'https://secure.gravatar.com/avatar/14baf1f4155b9dca35b7bbd97bcc3da7',
     dateOfBirth: '1996-07-15',
     userStatus: true,
     address: {
@@ -39,24 +37,24 @@ export class InMemoryAuthService extends AuthService {
       },
     ],
     fullName: '',
-  });
+  })
 
   constructor() {
-    super();
+    super()
     console.warn(
       "You're using the InMemoryAuthService. Do not use this service in production"
-    );
+    )
   }
 
   protected authProvider(
     email: string,
     password: string
   ): Observable<IServerAuthResponse> {
-    email = email.toLowerCase();
+    email = email.toLowerCase()
     if (!email.endsWith('@test.com')) {
       return throwError(
         () => new Error('Failed to login! Email needs to end with @test.com.')
-      );
+      )
     }
     this.authStatus = {
       isAuthenticated: true,
@@ -70,9 +68,9 @@ export class InMemoryAuthService extends AuthService {
         : email.includes('manager')
         ? Role.Manager
         : Role.None,
-    };
+    }
 
-    this.defaultUser.role = Role.None;
+    this.defaultUser.role = Role.None
 
     const authResponse: IServerAuthResponse = {
       status: 200,
@@ -82,16 +80,16 @@ export class InMemoryAuthService extends AuthService {
         issuedAt: new Date(),
         blah: 'blah blah',
       }),
-    };
+    }
 
-    return of(authResponse);
+    return of(authResponse)
   }
 
   protected transformJwtToken(token: unknown): IAuthStatus {
-    return this.authStatus ?? defaultAuthStatus;
+    return this.authStatus ?? defaultAuthStatus
   }
 
   protected getCurrentUser(): Observable<User> {
-    return of(this.defaultUser);
+    return of(this.defaultUser)
   }
 }

@@ -7,12 +7,7 @@
   <button mat-button mat-dialog-close *ngIf="data.cancelText">
     {{ data.cancelText }}
   </button>
-  <button
-    mat-raised-button
-    color="primary"
-    [mat-dialog-close]="true"
-    cdkFocusInitial
-  >
+  <button mat-raised-button color="primary" [mat-dialog-close]="true" cdkFocusInitial>
     {{ data.okText }}
   </button>
 </mat-dialog-actions>

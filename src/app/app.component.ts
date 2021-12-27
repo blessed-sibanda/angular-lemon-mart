@@ -1,8 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { SubSink } from 'subsink';
-import { AuthService } from './auth/auth.service';
-import { MediaObserver } from '@angular/flex-layout';
-import { combineLatest, tap } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core'
+import { MediaObserver } from '@angular/flex-layout'
+import { combineLatest, tap } from 'rxjs'
+import { SubSink } from 'subsink'
+
+import { AuthService } from './auth/auth.service'
 
 @Component({
   selector: 'app-root',
@@ -10,8 +11,8 @@ import { combineLatest, tap } from 'rxjs';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, OnDestroy {
-  private subs = new SubSink();
-  opened: boolean = false;
+  private subs = new SubSink()
+  opened: boolean = false
 
   constructor(public authService: AuthService, public media: MediaObserver) {}
 
@@ -23,23 +24,20 @@ export class AppComponent implements OnInit, OnDestroy {
       .pipe(
         tap(([mediaValue, authStatus]) => {
           if (!authStatus?.isAuthenticated) {
-            this.opened = false;
+            this.opened = false
           } else {
-            if (
-              mediaValue[0].mqAlias === 'xs' ||
-              mediaValue[0].mqAlias === 'sm'
-            ) {
-              this.opened = false;
+            if (mediaValue[0].mqAlias === 'xs' || mediaValue[0].mqAlias === 'sm') {
+              this.opened = false
             } else {
-              this.opened = true;
+              this.opened = true
             }
           }
         })
       )
-      .subscribe();
+      .subscribe()
   }
 
   ngOnDestroy(): void {
-    this.subs.unsubscribe();
+    this.subs.unsubscribe()
   }
 }

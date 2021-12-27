@@ -1,11 +1,12 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { Role } from '../auth/auth.enum';
-import { AuthGuard } from '../auth/auth.guard';
-import { ManagerHomeComponent } from './manager-home/manager-home.component';
-import { ManagerComponent } from './manager.component';
-import { ReceiptLookupComponent } from './receipt-lookup/receipt-lookup.component';
-import { UserManagementComponent } from './user-management/user-management.component';
+import { NgModule } from '@angular/core'
+import { RouterModule, Routes } from '@angular/router'
+
+import { Role } from '../auth/auth.enum'
+import { AuthGuard } from '../auth/auth.guard'
+import { ManagerHomeComponent } from './manager-home/manager-home.component'
+import { ManagerComponent } from './manager.component'
+import { ReceiptLookupComponent } from './receipt-lookup/receipt-lookup.component'
+import { UserManagementComponent } from './user-management/user-management.component'
 
 const routes: Routes = [
   {
@@ -33,7 +34,7 @@ const routes: Routes = [
       },
     ],
   },
-];
+]
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

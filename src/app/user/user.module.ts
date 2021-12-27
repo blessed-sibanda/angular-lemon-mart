@@ -1,9 +1,9 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common'
+import { NgModule } from '@angular/core'
 
-import { UserRoutingModule } from './user-routing.module';
-import { ProfileComponent } from './profile/profile.component';
-import { LogoutComponent } from './logout/logout.component';
+import { LogoutComponent } from './logout/logout.component'
+import { ProfileComponent } from './profile/profile.component'
+import { UserRoutingModule } from './user-routing.module'
 
 @NgModule({
   declarations: [ProfileComponent, LogoutComponent],

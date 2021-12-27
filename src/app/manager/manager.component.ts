@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MediaObserver } from '@angular/flex-layout';
+import { Component, OnInit } from '@angular/core'
+import { MediaObserver } from '@angular/flex-layout'
 
 @Component({
   selector: 'app-manager',
@@ -11,11 +11,7 @@ import { MediaObserver } from '@angular/flex-layout';
       <a mat-button routerLinkActive="active-link" routerLink="/manager/users">
         User Management
       </a>
-      <a
-        mat-button
-        routerLinkActive="active-link"
-        routerLink="/manager/receipts"
-      >
+      <a mat-button routerLinkActive="active-link" routerLink="/manager/receipts">
         Receipt Lookup
       </a>
       <span class="flex-spacer"></span>
@@ -27,12 +23,7 @@ import { MediaObserver } from '@angular/flex-layout';
       >
         <mat-icon>list</mat-icon>
       </button>
-      <button
-        routerLink="/pos"
-        class="mat-elevation-z2"
-        aria-label="POS"
-        mat-mini-fab
-      >
+      <button routerLink="/pos" class="mat-elevation-z2" aria-label="POS" mat-mini-fab>
         <mat-icon>shopping_cart</mat-icon>
       </button>
     </mat-toolbar>

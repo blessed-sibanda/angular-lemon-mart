@@ -1,57 +1,32 @@
 <div class="app-container">
-  <mat-toolbar
-    *ngIf="{
+  <mat-toolbar *ngIf="{
       status: authService.authStatus$ | async,
       user: authService.currentUser$ | async
-    } as auth"
-    color="primary"
-    fxLayoutGap="8px"
-    class="app-toolbar"
-    [class.app-is-mobile]="media.isActive('xs')"
-  >
-    <button
-      mat-icon-button
-      (click)="auth?.status?.isAuthenticated && sidenav.toggle()"
-    >
+    } as auth" color="primary" fxLayoutGap="8px" class="app-toolbar"
+    [class.app-is-mobile]="media.isActive('xs')">
+    <button mat-icon-button (click)="auth?.status?.isAuthenticated && sidenav.toggle()">
       <mat-icon>menu</mat-icon>
     </button>
-    <a mat-button routerLink="/home"><h1>LemonMart</h1></a>
+    <a mat-button routerLink="/home">
+      <h1>LemonMart</h1>
+    </a>
     <span class="flex-spacer"></span>
-    <button
-      *ngIf="auth?.status?.isAuthenticated"
-      routerLink="/user/profile"
-      class="mat-elevation-z2"
-      mat-mini-fab
-      color="primary"
-      aria-label="User Profile"
-    >
-      <img
-        *ngIf="auth?.user?.picture; else icon"
-        [src]="auth?.user?.picture"
-        class="image-cropper"
-        alt=""
-      />
-      <ng-template #icon><mat-icon>account_circle</mat-icon></ng-template>
+    <button *ngIf="auth?.status?.isAuthenticated" routerLink="/user/profile"
+      class="mat-elevation-z2" mat-mini-fab color="primary" aria-label="User Profile">
+      <img *ngIf="auth?.user?.picture; else icon" [src]="auth?.user?.picture"
+        class="image-cropper" alt="" />
+      <ng-template #icon>
+        <mat-icon>account_circle</mat-icon>
+      </ng-template>
     </button>
-    <button
-      *ngIf="auth?.status?.isAuthenticated"
-      routerLink="/user/logout"
-      aria-label="Logout"
-      class="mat-elevation-z2"
-      mat-mini-fab
-      color="primary"
-    >
+    <button *ngIf="auth?.status?.isAuthenticated" routerLink="/user/logout"
+      aria-label="Logout" class="mat-elevation-z2" mat-mini-fab color="primary">
       <mat-icon>lock_open</mat-icon>
     </button>
   </mat-toolbar>
   <mat-sidenav-container class="app-sidenav-container">
-    <mat-sidenav
-      #sidenav
-      [mode]="media.isActive('xs') ? 'over' : 'side'"
-      [fixedInViewport]="media.isActive('xs')"
-      fixedTopGap="56"
-      [opened]="opened"
-    >
+    <mat-sidenav #sidenav [mode]="media.isActive('xs') ? 'over' : 'side'"
+      [fixedInViewport]="media.isActive('xs')" fixedTopGap="56" [opened]="opened">
       <app-navigation-menu></app-navigation-menu>
     </mat-sidenav>
     <mat-sidenav-content>

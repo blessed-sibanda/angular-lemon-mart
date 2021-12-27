@@ -1,19 +1,12 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-} from '@angular/material/dialog';
-import {
-  commonTestingModules,
-  commonTestingProviders,
-} from '../common.testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog'
 
-import { SimpleDialogComponent } from './simple-dialog.component';
+import { commonTestingModules, commonTestingProviders } from '../common.testing'
+import { SimpleDialogComponent } from './simple-dialog.component'
 
 describe('SimpleDialogComponent', () => {
-  let component: SimpleDialogComponent;
-  let fixture: ComponentFixture<SimpleDialogComponent>;
+  let component: SimpleDialogComponent
+  let fixture: ComponentFixture<SimpleDialogComponent>
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -30,16 +23,16 @@ describe('SimpleDialogComponent', () => {
       ],
       imports: commonTestingModules,
       declarations: [SimpleDialogComponent],
-    }).compileComponents();
-  });
+    }).compileComponents()
+  })
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SimpleDialogComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    fixture = TestBed.createComponent(SimpleDialogComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

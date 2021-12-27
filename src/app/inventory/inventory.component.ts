@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MediaObserver } from '@angular/flex-layout';
+import { Component, OnInit } from '@angular/core'
+import { MediaObserver } from '@angular/flex-layout'
 
 @Component({
   selector: 'app-inventory',
@@ -8,26 +8,14 @@ import { MediaObserver } from '@angular/flex-layout';
       <a mat-button routerLinkActive="active-link" routerLink="/inventory/home">
         Inventory Dashboard
       </a>
-      <a
-        mat-button
-        routerLinkActive="active-link"
-        routerLink="/inventory/stock"
-      >
+      <a mat-button routerLinkActive="active-link" routerLink="/inventory/stock">
         Stock Entry
       </a>
-      <a
-        mat-button
-        routerLinkActive="active-link"
-        routerLink="/inventory/products"
-      >
+      <a mat-button routerLinkActive="active-link" routerLink="/inventory/products">
         Products
       </a>
 
-      <a
-        mat-button
-        routerLinkActive="active-link"
-        routerLink="/inventory/categories"
-      >
+      <a mat-button routerLinkActive="active-link" routerLink="/inventory/categories">
         Categories
       </a>
     </mat-toolbar>
