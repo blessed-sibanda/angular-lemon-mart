@@ -39,4 +39,4 @@ import { MatToolbarModule } from '@angular/material/toolbar'
     MatListModule,
   ],
 })
-export class MaterialModule {}
+export class AppMaterialModule {}

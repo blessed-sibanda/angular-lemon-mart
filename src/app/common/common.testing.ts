@@ -6,7 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing'
 import { Observable, Subscription, of } from 'rxjs'
 
 import { AuthService } from '../auth/auth.service'
-import { MaterialModule } from '../material.module'
+import { AppMaterialModule } from '../app-material.module'
 import { UiService } from './ui.service'
 
 export class MediaObserverFake {
@@ -40,7 +40,7 @@ export const commonTestingProviders: any[] = [
 
 export const commonTestingModules: any[] = [
   ReactiveFormsModule,
-  MaterialModule,
+  AppMaterialModule,
   NoopAnimationsModule,
   HttpClientTestingModule,
   RouterTestingModule,

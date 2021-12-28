@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { FlexLayoutModule } from '@angular/flex-layout'
 
-import { MaterialModule } from '../material.module'
+import { AppMaterialModule } from '../app-material.module'
 import { ManagerHomeComponent } from './manager-home/manager-home.component'
 import { ManagerRoutingModule } from './manager-routing.module'
 import { ManagerComponent } from './manager.component'
@@ -16,6 +16,6 @@ import { UserManagementComponent } from './user-management/user-management.compo
     UserManagementComponent,
     ReceiptLookupComponent,
   ],
-  imports: [CommonModule, ManagerRoutingModule, MaterialModule, FlexLayoutModule],
+  imports: [CommonModule, ManagerRoutingModule, AppMaterialModule, FlexLayoutModule],
 })
 export class ManagerModule {}

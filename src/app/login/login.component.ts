@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
-import { catchError, combineLatest, filter, tap } from 'rxjs'
+import { catchError, combineLatest, filter, tap, map } from 'rxjs'
 import { SubSink } from 'subsink'
 
 import { Role } from '../auth/auth.enum'
@@ -53,22 +53,26 @@ export class LoginComponent implements OnInit, OnDestroy {
       .login(submittedForm.value.email, submittedForm.value.password)
       .subscribe({
         error: (err) => (this.loginError = err.message),
+        next: () => {
+          combineLatest([this.authService.currentUser$, this.authService.authStatus$])
+            .pipe(
+              filter(
+                ([user, authStatus]) => authStatus.isAuthenticated && user?._id !== ''
+              ),
+              tap(([user, authStatus]) => {
+                console.log('User -->', user)
+                console.log('Auth Status -->', authStatus)
+                this.uiService.showToast(
+                  `Welcome ${user.fullName}! Role: ${authStatus.userRole}`
+                )
+                this.router.navigate([
+                  this.redirectUrl || this.homeRoutePerRole(user.role as Role),
+                ])
+              })
+            )
+            .subscribe()
+        },
       })
-
-    this.subs.sink = combineLatest([
-      this.authService.authStatus$,
-      this.authService.currentUser$,
-    ])
-      .pipe(
-        filter(([authStatus, user]) => authStatus.isAuthenticated && user?._id !== ''),
-        tap(([authStatus, user]) => {
-          this.uiService.showToast(`Welcome ${user.fullName}! Role: ${user.role}`)
-          this.router.navigate([
-            this.redirectUrl || this.homeRoutePerRole(user.role as Role),
-          ])
-        })
-      )
-      .subscribe()
   }
 
   private homeRoutePerRole(role: Role) {
