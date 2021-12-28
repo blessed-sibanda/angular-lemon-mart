@@ -5,8 +5,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations'
 import { RouterTestingModule } from '@angular/router/testing'
 import { Observable, Subscription, of } from 'rxjs'
 
-import { AuthService } from '../auth/auth.service'
 import { AppMaterialModule } from '../app-material.module'
+import { AuthService } from '../auth/auth.service'
 import { UiService } from './ui.service'
 
 export class MediaObserverFake {

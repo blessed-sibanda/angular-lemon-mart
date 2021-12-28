@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { catchError, map, Observable, throwError } from 'rxjs'
+import { Observable, catchError, map, throwError } from 'rxjs'
 import { environment } from 'src/environments/environment'
+
 import { AuthService } from '../auth/auth.service'
 import { CacheService } from '../auth/cache.service'
 import { transformError } from '../common/common'
-
 import { IUser, User } from './user'
 
 export interface IUserService {

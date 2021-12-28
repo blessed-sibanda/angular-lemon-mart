@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
-import { map, catchError } from 'rxjs/operators'
+import { catchError, map } from 'rxjs/operators'
 import { environment } from 'src/environments/environment'
 import { $enum } from 'ts-enum-util'
+
 import { transformError } from '../common/common'
 import { IUser, User } from '../user/user'
 import { Role } from './auth.enum'

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { filter, Observable, tap } from 'rxjs'
+import { Observable, filter, tap } from 'rxjs'
 import { Role } from 'src/app/auth/auth.enum'
 import { AuthService } from 'src/app/auth/auth.service'
 import { UiService } from 'src/app/common/ui.service'
@@ -12,6 +12,7 @@ import {
 } from 'src/app/common/validations'
 import { EmailValidation } from 'src/app/common/validators'
 import { $enum } from 'ts-enum-util'
+
 import { IUser, PhoneType } from '../user'
 import { UserService } from '../user.service'
 import { IUSState } from './data'
