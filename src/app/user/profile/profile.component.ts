@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { Observable, filter, tap } from 'rxjs'
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { Observable, filter, tap, startWith, map } from 'rxjs'
 import { Role } from 'src/app/auth/auth.enum'
 import { AuthService } from 'src/app/auth/auth.service'
 import { UiService } from 'src/app/common/ui.service'
@@ -8,14 +8,16 @@ import {
   OneCharValidation,
   OptionalTextValidation,
   RequiredTextValidation,
+  USAPhoneNumberValidation,
   USAZipCodeValidation,
 } from 'src/app/common/validations'
 import { EmailValidation } from 'src/app/common/validators'
+import { ErrorSets } from 'src/app/user-controls/field-error/field-error-directive'
 import { $enum } from 'ts-enum-util'
 
-import { IUser, PhoneType } from '../user'
+import { IPhone, IUser, PhoneType } from '../user'
 import { UserService } from '../user.service'
-import { IUSState } from './data'
+import { IUSState, USStateFilter } from './data'
 
 @Component({
   selector: 'app-profile',
@@ -30,6 +32,8 @@ export class ProfileComponent implements OnInit {
   states$!: Observable<IUSState[]>
   userError = ''
   currentUserId!: string
+  ErrorSets = ErrorSets
+  now = new Date()
 
   constructor(
     private formBuilder: FormBuilder,
@@ -49,6 +53,20 @@ export class ProfileComponent implements OnInit {
       )
       .subscribe()
   }
+
+  get dateOfBirth() {
+    return this.formGroup.get('dateOfBirth')?.value || this.now
+  }
+
+  get age() {
+    return this.now.getFullYear() - this.dateOfBirth.getFullYear()
+  }
+
+  minDate = new Date(
+    this.now.getFullYear() - 100,
+    this.now.getMonth(),
+    this.now.getDate()
+  )
 
   private get currentUserRole() {
     return this.authService.authStatus$.value.userRole
@@ -77,6 +95,49 @@ export class ProfileComponent implements OnInit {
         state: [user?.address?.state || '', RequiredTextValidation],
         zip: [user?.address?.zip || '', USAZipCodeValidation],
       }),
+      phones: this.formBuilder.array(this.buildPhoneArray(user?.phones || [])),
     })
+
+    const state = this.formGroup.get('address.state')
+    if (state != null) {
+      this.states$ = state.valueChanges.pipe(
+        startWith(''),
+        map((value) => USStateFilter(value))
+      )
+    }
+  }
+
+  get phonesArray(): FormArray {
+    return this.formGroup.get('phones') as FormArray
+  }
+
+  addPhone() {
+    this.phonesArray.push(
+      this.buildPhoneFormControl(this.formGroup.get('phones')?.value.length + 1)
+    )
+  }
+
+  private buildPhoneArray(phones: IPhone[]) {
+    const groups = []
+    if (phones?.length === 0) {
+      groups.push(this.buildPhoneFormControl(1))
+    } else {
+      phones.forEach((p) => {
+        groups.push(this.buildPhoneFormControl(phones.indexOf(p), p.type, p.digits))
+      })
+    }
+    return groups
+  }
+
+  private buildPhoneFormControl(id: number, type?: string, phoneNumber?: string) {
+    return this.formBuilder.group({
+      id: [id],
+      type: [type || '', Validators.required],
+      digits: [phoneNumber || '', USAPhoneNumberValidation],
+    })
+  }
+
+  convertTypeToPhoneType(type: string): PhoneType {
+    return PhoneType[$enum(PhoneType).asKeyOrThrow(type)]
   }
 }

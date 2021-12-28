@@ -4,6 +4,7 @@ import { FlexLayoutModule } from '@angular/flex-layout'
 import { ReactiveFormsModule } from '@angular/forms'
 
 import { AppMaterialModule } from '../app-material.module'
+import { FieldErrorModule } from '../user-controls/field-error/field-error.module'
 import { LogoutComponent } from './logout/logout.component'
 import { ProfileComponent } from './profile/profile.component'
 import { UserMaterialModule } from './user-material.module'
@@ -18,6 +19,7 @@ import { UserRoutingModule } from './user-routing.module'
     UserMaterialModule,
     ReactiveFormsModule,
     FlexLayoutModule,
+    FieldErrorModule,
   ],
 })
 export class UserModule {}
