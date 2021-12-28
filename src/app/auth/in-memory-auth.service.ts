@@ -58,8 +58,6 @@ export class InMemoryAuthService extends AuthService {
     }
     this.authStatus = {
       isAuthenticated: true,
-      userEmail: this.defaultUser.email,
-      userPicture: this.defaultUser.picture,
       userId: this.defaultUser._id,
       userRole: email.includes('cashier')
         ? Role.Cashier
@@ -73,7 +71,6 @@ export class InMemoryAuthService extends AuthService {
     this.defaultUser.role = Role.None
 
     const authResponse: IServerAuthResponse = {
-      status: 200,
       accessToken: sign(this.authStatus, 'secret', {
         expiresIn: '1h',
         algorithm: 'none',

@@ -22,12 +22,19 @@ export class AuthHttpInterceptor implements HttpInterceptor {
     })
     return next.handle(authRequest).pipe(
       catchError((err: HttpErrorResponse, caught) => {
+        console.log(this.router.routerState.snapshot.url)
         if (err.status === 401) {
-          this.router.navigate(['/login'], {
-            queryParams: {
-              redirectUrl: this.router.routerState.snapshot.url,
-            },
-          })
+          if (
+            !(
+              this.router.routerState.snapshot.url.startsWith('/home') ||
+              this.router.routerState.snapshot.url.startsWith('/login')
+            )
+          )
+            this.router.navigate(['/login'], {
+              queryParams: {
+                redirectUrl: this.router.routerState.snapshot.url,
+              },
+            })
         }
         return throwError(() => err)
       })

@@ -1,15 +1,7 @@
 import { Injectable } from '@angular/core'
 import jwt_decode from 'jwt-decode'
-import {
-  BehaviorSubject,
-  Observable,
-  catchError,
-  filter,
-  map,
-  mergeMap,
-  pipe,
-  tap,
-} from 'rxjs'
+import { BehaviorSubject, Observable, pipe, throwError } from 'rxjs'
+import { catchError, filter, map, mergeMap, tap } from 'rxjs/operators'
 
 import { transformError } from '../common/common'
 import { IUser, User } from '../user/user'
@@ -20,24 +12,16 @@ export interface IAuthStatus {
   isAuthenticated: boolean
   userRole: Role
   userId: string
-  userEmail: string
-  userPicture: string
 }
 
 export interface IServerAuthResponse {
-  accessToken?: string
-  status: number
-  error?: {
-    message: string
-  }
+  accessToken: string
 }
 
 export const defaultAuthStatus: IAuthStatus = {
   isAuthenticated: false,
   userRole: Role.None,
   userId: '',
-  userEmail: '',
-  userPicture: '',
 }
 
 export interface IAuthService {
@@ -56,7 +40,7 @@ export abstract class AuthService extends CacheService implements IAuthService {
   private getAndUpdateUserIfAuthenticated = pipe(
     filter((status: IAuthStatus) => status.isAuthenticated),
     mergeMap(() => this.getCurrentUser()),
-    map((user) => this.currentUser$.next(user)),
+    map((user: IUser) => this.currentUser$.next(user)),
     catchError(transformError)
   )
 
@@ -82,23 +66,20 @@ export abstract class AuthService extends CacheService implements IAuthService {
 
     const loginResponse$ = this.authProvider(email, password).pipe(
       map((value) => {
-        if (value.status == 200) {
-          this.setToken(value.accessToken || '')
-          const token = jwt_decode(value.accessToken || '')
-          return this.transformJwtToken(token)
-        } else {
-          throw new Error(value.error?.message)
-        }
+        this.setToken(value.accessToken)
+        return this.getAuthStatusFromToken()
       }),
       tap((status) => this.authStatus$.next(status)),
       this.getAndUpdateUserIfAuthenticated
     )
+
     loginResponse$.subscribe({
       error: (err) => {
         this.logout()
-        return transformError(err)
+        return throwError(() => err)
       },
     })
+
     return loginResponse$
   }
 

@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
-import { map } from 'rxjs/operators'
+import { map, catchError } from 'rxjs/operators'
 import { environment } from 'src/environments/environment'
 import { $enum } from 'ts-enum-util'
+import { transformError } from '../common/common'
 import { IUser, User } from '../user/user'
 import { Role } from './auth.enum'
 import { AuthService, IAuthStatus, IServerAuthResponse } from './auth.service'
@@ -40,12 +41,12 @@ export class CustomAuthService extends AuthService {
       userRole: $enum(Role).asValueOrDefault(token.role, Role.None),
       userEmail: token.email,
       userPicture: token.picture,
-    }
+    } as IAuthStatus
   }
 
   protected getCurrentUser(): Observable<User> {
     return this.httpClient
       .get<IUser>(`${environment.baseUrl}/v1/auth/me`)
-      .pipe(map(User.Build))
+      .pipe(map(User.Build), catchError(transformError))
   }
 }

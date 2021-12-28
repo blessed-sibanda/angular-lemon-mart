@@ -61,7 +61,7 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
         }
         return allowLogin
       }),
-      take(1)
+      take(1) // the observable must complete for the guard to work
     )
   }
 
