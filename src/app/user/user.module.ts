@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { FlexLayoutModule } from '@angular/flex-layout'
 import { ReactiveFormsModule } from '@angular/forms'
+import { NgxMaskModule } from 'ngx-mask'
 
 import { AppMaterialModule } from '../app-material.module'
 import { FieldErrorModule } from '../user-controls/field-error/field-error.module'
@@ -21,6 +22,7 @@ import { ViewUserComponent } from './view-user/view-user.component'
     ReactiveFormsModule,
     FlexLayoutModule,
     FieldErrorModule,
+    NgxMaskModule.forChild(),
   ],
 })
 export class UserModule {}
