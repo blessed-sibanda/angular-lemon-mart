@@ -1,1 +1,8 @@
-<p>user-management works!</p>
+<div style="margin: 0 16px;" fxLayout='row' fxLayoutAlign="space-between" fxLayout.lt-sm="column">
+  <div fxFlex="70%">
+    <router-outlet name='master'></router-outlet>
+  </div>
+  <div fxFlex="25%">
+    <router-outlet name='detail'></router-outlet>
+  </div>
+</div>

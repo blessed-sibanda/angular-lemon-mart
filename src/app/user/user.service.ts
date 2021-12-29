@@ -8,10 +8,17 @@ import { CacheService } from '../auth/cache.service'
 import { transformError } from '../common/common'
 import { IUser, User } from './user'
 
+export interface IUsers {
+  data: IUser[]
+  total: number
+}
 export interface IUserService {
   getUser(id: string): Observable<IUser>
   updateUser(id: string, user: IUser): Observable<IUser>
+  getUsers(pageSize: number, searchText: string, pagesToSkip: number): Observable<IUsers>
 }
+
+export type SortDirection = '' | 'asc' | 'desc'
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +26,27 @@ export interface IUserService {
 export class UserService extends CacheService implements IUserService {
   constructor(private httpClient: HttpClient, private authService: AuthService) {
     super()
+  }
+
+  getUsers(
+    pageSize: number,
+    searchText = '',
+    pagesToSkip = 0,
+    sortColumn = '',
+    sortDirection: SortDirection = 'asc'
+  ): Observable<IUsers> {
+    const recordsToKeep = pageSize * pagesToSkip
+    if (sortColumn) {
+      sortColumn = sortDirection === 'desc' ? `-${sortColumn}` : sortColumn
+    }
+    return this.httpClient.get<IUsers>(`${environment.baseUrl}/v2/users`, {
+      params: {
+        filter: searchText,
+        skip: pagesToSkip.toString(),
+        limit: pageSize.toString(),
+        sort: sortColumn,
+      },
+    })
   }
 
   getUser(id: string | null): Observable<IUser> {

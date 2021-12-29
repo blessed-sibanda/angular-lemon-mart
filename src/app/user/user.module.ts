@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms'
 import { NgxMaskModule } from 'ngx-mask'
 
 import { AppMaterialModule } from '../app-material.module'
+import { SharedComponentsModule } from '../shared-components.module'
 import { FieldErrorModule } from '../user-controls/field-error/field-error.module'
 import { LemonRaterComponent } from '../user-controls/lemon-rater/lemon-rater.component'
 import { LogoutComponent } from './logout/logout.component'
@@ -12,15 +13,9 @@ import { ProfileComponent } from './profile/profile.component'
 import { UserMaterialModule } from './user-material.module'
 import { UserRoutingModule } from './user-routing.module'
 import { UserResolve } from './user.resolve'
-import { ViewUserComponent } from './view-user/view-user.component'
 
 @NgModule({
-  declarations: [
-    ProfileComponent,
-    LogoutComponent,
-    ViewUserComponent,
-    LemonRaterComponent,
-  ],
+  declarations: [ProfileComponent, LogoutComponent, LemonRaterComponent],
   imports: [
     CommonModule,
     UserRoutingModule,
@@ -30,6 +25,7 @@ import { ViewUserComponent } from './view-user/view-user.component'
     FlexLayoutModule,
     FieldErrorModule,
     NgxMaskModule.forChild(),
+    SharedComponentsModule,
   ],
   providers: [UserResolve],
 })
