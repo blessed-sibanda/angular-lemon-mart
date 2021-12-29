@@ -7,7 +7,7 @@
   "editor.formatOnType": false,
   "editor.formatOnPaste": false,
   "editor.formatOnSave": true,
-  "editor.minimap.enabled": false,
+  "editor.minimap.enabled": true,
   "editor.codeActionsOnSave": {
     "source.organizeImports": false,
     "source.fixAll.tslint": true
@@ -23,7 +23,7 @@
   "git.enableSmartCommit": true,
   "npm.enableScriptExplorer": true,
   "typescript.tsdk": "node_modules/typescript/lib",
-  "workbench.iconTheme": "material-icon-theme",
+  "workbench.iconTheme": "vscode-icons",
   "auto-close-tag.SublimeText3Mode": true,
   "html.autoClosingTags": false,
   "gitlens.menus": {

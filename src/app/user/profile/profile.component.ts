@@ -13,6 +13,7 @@ import {
 } from 'src/app/common/validations'
 import { EmailValidation } from 'src/app/common/validators'
 import { ErrorSets } from 'src/app/user-controls/field-error/field-error-directive'
+import { SubSink } from 'subsink'
 import { $enum } from 'ts-enum-util'
 
 import { IPhone, IUser, PhoneType } from '../user'
@@ -34,6 +35,7 @@ export class ProfileComponent implements OnInit {
   currentUserId!: string
   ErrorSets = ErrorSets
   now = new Date()
+  subs = new SubSink()
 
   constructor(
     private formBuilder: FormBuilder,
@@ -55,7 +57,7 @@ export class ProfileComponent implements OnInit {
   }
 
   get dateOfBirth() {
-    return this.formGroup.get('dateOfBirth')?.value || this.now
+    return new Date(this.formGroup.get('dateOfBirth')?.value) || this.now
   }
 
   get age() {
@@ -139,5 +141,17 @@ export class ProfileComponent implements OnInit {
 
   convertTypeToPhoneType(type: string): PhoneType {
     return PhoneType[$enum(PhoneType).asKeyOrThrow(type)]
+  }
+
+  async save(form: FormGroup) {
+    this.subs.add(
+      this.userService.updateUser(this.currentUserId, form.value).subscribe({
+        next: (res: IUser) => {
+          this.formGroup.patchValue(res)
+          this.uiService.showToast('Updated User')
+        },
+        error: (err) => (this.userError = err.message),
+      })
+    )
   }
 }
