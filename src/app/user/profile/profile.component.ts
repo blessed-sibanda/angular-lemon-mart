@@ -85,6 +85,7 @@ export class ProfileComponent implements OnInit {
         middle: [user?.name?.middle || '', OneCharValidation],
         last: [user?.name?.last || '', RequiredTextValidation],
       }),
+      level: [user?.level || 0, Validators.required],
       role: [
         { value: user?.role || '', disabled: this.currentUserRole !== Role.Manager },
         [Validators.required],

@@ -1,0 +1,36 @@
+.lemons {
+  cursor: pointer;
+
+  &:hover .lemon #fill-area {
+    fill: #ffe200 !important;
+  }
+
+  .lemon {
+    float: left;
+    margin: 0px 5px;
+
+    #fill-area {
+      fill: #d8d8d8;
+    }
+
+    &:hover ~ .lemon #fill-area {
+      fill: #d8d8d8 !important;
+    }
+  }
+
+  .lemon.selected #fill-area {
+    fill: #ffe200 !important;
+  }
+
+  .dad.heart #ada {
+    fill: #6a0dad !important;
+  }
+}
+
+.lemons.disabled:hover {
+  cursor: not-allowed;
+
+  .lemon #fill-area {
+    fill: #d8d8d8 !important;
+  }
+}
