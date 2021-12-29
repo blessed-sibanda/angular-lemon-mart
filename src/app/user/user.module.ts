@@ -11,6 +11,7 @@ import { LogoutComponent } from './logout/logout.component'
 import { ProfileComponent } from './profile/profile.component'
 import { UserMaterialModule } from './user-material.module'
 import { UserRoutingModule } from './user-routing.module'
+import { UserResolve } from './user.resolve'
 import { ViewUserComponent } from './view-user/view-user.component'
 
 @NgModule({
@@ -30,5 +31,6 @@ import { ViewUserComponent } from './view-user/view-user.component'
     FieldErrorModule,
     NgxMaskModule.forChild(),
   ],
+  providers: [UserResolve],
 })
 export class UserModule {}

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { ActivatedRoute } from '@angular/router'
 import { Observable, filter, tap, startWith, map } from 'rxjs'
 import { Role } from 'src/app/auth/auth.enum'
 import { AuthService } from 'src/app/auth/auth.service'
@@ -41,19 +42,27 @@ export class ProfileComponent implements OnInit {
     private formBuilder: FormBuilder,
     private uiService: UiService,
     private userService: UserService,
-    private authService: AuthService
+    private authService: AuthService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.buildForm()
-    this.authService.currentUser$
-      .pipe(
-        filter((user) => user !== null),
-        tap((user) => {
-          ;(this.currentUserId = user._id), this.buildForm(user)
-        })
-      )
-      .subscribe()
+
+    if (this.route.snapshot.data['user']) {
+      let user = this.route.snapshot.data['user']
+      this.currentUserId = user._id
+      this.formGroup.patchValue(user, { onlySelf: false })
+    } else {
+      this.authService.currentUser$
+        .pipe(
+          filter((user) => user !== null),
+          tap((user) => {
+            ;(this.currentUserId = user._id), this.buildForm(user)
+          })
+        )
+        .subscribe()
+    }
   }
 
   get dateOfBirth() {
